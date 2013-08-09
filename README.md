@@ -9,6 +9,27 @@ or at certain times (such as application startup).
 GreenClock launches a green thread per task. Therefore every task will be executed in a concurrent manner,
 without blocking each other.
 
+### Status
+
+This module is currently under development.
+
+### Installation
+
+To install GreenClock from [pip](https://pypi.python.org/pypi/pip):
+
+```bash
+    $ pip install greenclock
+```
+
+
+To install GreenClock from source:
+```bash
+    $ git clone git@github.com:pcdinh/greenclock.git
+    $ python setup.py install
+```
+
+### Usage
+
 ```
 
 import greenclock
