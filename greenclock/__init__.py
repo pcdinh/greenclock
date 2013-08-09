@@ -31,13 +31,13 @@ class Scheduler(object):
         self.logger_name = logger_name
         self.tasks = []
 
-    '''
-    ts = Scheduler('my_task')
-    ts.schedule(every(seconds=10), handle_message, "Every 10 seconds")
-    ts.schedule(every(seconds=30), fetch_url, url="http://yahoo.com", section="stock_ticker")
-    ts.run_forever()
-    '''
     def schedule(self, name, func, timer, *args, **kwargs):
+        '''
+        ts = Scheduler('my_task')
+        ts.schedule(every(seconds=10), handle_message, "Every 10 seconds")
+        ts.schedule(every(seconds=30), fetch_url, url="http://yahoo.com", section="stock_ticker")
+        ts.run_forever()
+        '''
         self.tasks.append(Task(name, func, timer, *args, **kwargs))
 
     def run(self, task):
