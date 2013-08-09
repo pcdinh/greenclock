@@ -1,7 +1,7 @@
 GreenClock
 ==========
 
-Time-based task scheduler using gevent
+GreenClock is a time-based task scheduler using gevent
 
 With GreenClock, you can: Schedule a task to run every X seconds, daily, weekly, monthly, 
 or at certain times (such as application startup).

@@ -14,7 +14,7 @@ setup(
     description='gevent-based task scheduling library.',
     long_description=(open('README.md').read() + '\n\n' +
                       open('CHANGELOG.md').read()),
-    license=open('LICENSE').read(),
+    license=open('LICENSE.txt').read(),
     author='Pham Cong Dinh',
     author_email='pcdinh@gmail.com',
     url='https://github.com/pcdinh/greenclock',
