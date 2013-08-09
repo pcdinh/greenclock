@@ -41,7 +41,6 @@ class Scheduler(object):
         self.tasks.append(Task(name, func, timer, *args, **kwargs))
 
     def run(self, task):
-        print('----- Run task ' + task.name)
         gevent.spawn(task.action, *task.args, **task.kwargs)
         try:
             gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
