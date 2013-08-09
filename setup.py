@@ -12,8 +12,6 @@ setup(
     packages=['greenclock'],
     version='0.1.0',
     description='gevent-based task scheduling library.',
-    long_description=(open('README.md').read() + '\n\n' +
-                      open('CHANGELOG.md').read()),
     license=open('LICENSE.txt').read(),
     author='Pham Cong Dinh',
     author_email='pcdinh@gmail.com',
@@ -23,10 +21,12 @@ setup(
         'cron', 'scheduling', 'schedule', 'periodic', 'jobs', 'clockwork', 'gevent'
     ],
     classifiers=[
+        'Development Status :: 2 - Pre-Alpha'
         'Intended Audience :: Developers',
         'License :: Public Domain',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Natural Language :: English',
+        'Topic :: Software Development :: Libraries'
     ],
 )
