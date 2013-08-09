@@ -21,7 +21,7 @@ setup(
         'cron', 'scheduling', 'schedule', 'periodic', 'jobs', 'clockwork', 'gevent'
     ],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha'
+        'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: Public Domain',
         'Programming Language :: Python :: 2.7',
