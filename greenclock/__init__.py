@@ -33,8 +33,8 @@ class Scheduler(object):
 
     '''
     ts = Scheduler('my_task')
-    ts.schedule(every(seconds=10), message, "Every 10 seconds")
-    ts.schedule(every(seconds=30), poke_website, url="http://yahoo.com", data="q=gevent")
+    ts.schedule(every(seconds=10), handle_message, "Every 10 seconds")
+    ts.schedule(every(seconds=30), fetch_url, url="http://yahoo.com", section="stock_ticker")
     ts.run_forever()
     '''
     def schedule(self, name, func, timer, *args, **kwargs):
@@ -43,6 +43,7 @@ class Scheduler(object):
     def run(self, task):
         gevent.spawn(task.action, *task.args, **task.kwargs)
         try:
+            # total_seconds is available in Python 2.7
             gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
         except StopIteration:
             pass
