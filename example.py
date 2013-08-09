@@ -16,5 +16,5 @@ def func_2():
 if __name__ == "__main__":
     scheduler = greenclock.Scheduler(logger_name='task_scheduler')
     scheduler.schedule('task_1', func_1, greenclock.every(seconds=4))
-    scheduler.schedule('task_2', func_2, greenclock.every(seconds=2))
+    scheduler.schedule('task_2', func_2, greenclock.every(seconds=1))
     scheduler.run_forever(start_at=None)

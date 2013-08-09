@@ -2,6 +2,9 @@
 
 import logging
 import gevent
+from gevent.pool import Pool
+from gevent import monkey
+monkey.patch_all()
 from datetime import timedelta, datetime
 
 def every(*args, **kwargs):
@@ -46,8 +49,9 @@ class Scheduler(object):
             pass
 
     def run_tasks(self):
+        self.pool = Pool(len(self.tasks))
         for task in self.tasks:
-            self.run(task)
+            self.pool.spawn(self.run, task)
 
     def run_forever(self, start_at=None):
         """
@@ -60,5 +64,6 @@ class Scheduler(object):
             self.run_tasks()
             while True:
                 gevent.sleep(seconds=1)
+            self.pool.join(timeout=30)
         except KeyboardInterrupt:
             logging.getLogger(self.logger_name).info('Time scheduler quits')
