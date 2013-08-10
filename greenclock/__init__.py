@@ -49,9 +49,10 @@ class Scheduler(object):
             pass
 
     def run_tasks(self):
-        self.pool = Pool(len(self.tasks))
+        pool = Pool(len(self.tasks))
         for task in self.tasks:
-            self.pool.spawn(self.run, task)
+            pool.spawn(self.run, task)
+        return pool
 
     def run_forever(self, start_at=None):
         """
@@ -61,9 +62,12 @@ class Scheduler(object):
                          'day' -> start at 0h next day
         """
         try:
-            self.run_tasks()
+            task_pool = self.run_tasks()
             while True:
                 gevent.sleep(seconds=1)
-            self.pool.join(timeout=30)
+            task_pool.join(timeout=30)
         except KeyboardInterrupt:
+            # https://github.com/surfly/gevent/issues/85
+            task_pool.closed = True
+            task_pool.kill()
             logging.getLogger(self.logger_name).info('Time scheduler quits')
