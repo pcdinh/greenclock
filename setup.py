@@ -15,13 +15,17 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload -r pypi')
     sys.exit()
 
+def long_description():
+    """Get the long description from the README"""
+    return open(os.path.join(sys.path[0], 'README.md')).read()
+
 setup(
     name='greenclock',
     packages=['greenclock'],
     version='0.1.1',
     description='gevent-based task scheduling library.',
-    license=open('LICENSE.txt').read(),
-    long_description=open("README.md").read(),
+    license='MIT',
+    long_description=long_description(),
     data_files=[("", ["LICENSE.txt"])],
     install_requires=[
         'gevent',
@@ -38,7 +42,6 @@ setup(
         'Intended Audience :: Developers',
         'License :: Public Domain',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
         'Natural Language :: English',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
