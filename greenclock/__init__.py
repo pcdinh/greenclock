@@ -1,7 +1,7 @@
 # coding: utf-8
 
-version_info = (0, 1, 2, 'dev', None)
-__version__ = '0.1.2-dev'
+version_info = (0, 1, 3, 'dev', None)
+__version__ = '0.1.3-dev'
 
 import logging
 import time
@@ -53,6 +53,7 @@ class Scheduler(object):
     def __init__(self, logger_name='greenlock.task'):
         self.logger_name = logger_name
         self.tasks = []
+        self.running = True
 
     def schedule(self, name, func, timer, *args, **kwargs):
         '''
@@ -67,12 +68,14 @@ class Scheduler(object):
         '''
         Runs a task and re-schedule it
         '''
-        gevent.spawn(task.action, *task.args, **task.kwargs)
+        greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
         try:
             # total_seconds is available in Python 2.7
-            gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
+            greenlet_later = gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
+            return greenlet_, greenlet_later
         except StopIteration:
             pass
+        return greenlet_, None
 
     def run_tasks(self):
         '''
@@ -85,6 +88,8 @@ class Scheduler(object):
 
     def run_forever(self, start_at='once'):
         """
+        Starts the scheduling engine
+        
         @param start_at: 'once' -> start immediately
                          'next_minute' -> start at the first second of the next minutes
                          'next_hour' -> start 00:00 (min) next hour
@@ -96,11 +101,18 @@ class Scheduler(object):
             wait_until(start_at)
         try:
             task_pool = self.run_tasks()
-            while True:
+            while self.running:
                 gevent.sleep(seconds=1)
             task_pool.join(timeout=30)
+            task_pool.kill()
         except KeyboardInterrupt:
             # https://github.com/surfly/gevent/issues/85
             task_pool.closed = True
             task_pool.kill()
             logging.getLogger(self.logger_name).info('Time scheduler quits')
+
+    def stop(self):
+        '''
+        Stops the scheduling engine
+        '''
+        self.running = False
