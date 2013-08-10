@@ -22,7 +22,7 @@ def long_description():
 setup(
     name='greenclock',
     packages=['greenclock'],
-    version='0.1.1',
+    version='0.1.2',
     description='gevent-based task scheduling library.',
     license='MIT',
     long_description=long_description(),

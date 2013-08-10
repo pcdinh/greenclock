@@ -1,5 +1,8 @@
 # coding: utf-8
 
+version_info = (0, 1, 2, 'dev', None)
+__version__ = '0.1.2dev'
+
 import logging
 import time
 from datetime import timedelta, datetime
