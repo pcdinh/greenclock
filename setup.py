@@ -40,7 +40,7 @@ setup(
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
-        'License :: Public Domain',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
         'Natural Language :: English',
         'Topic :: Software Development :: Libraries :: Python Modules',
