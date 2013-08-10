@@ -4,6 +4,8 @@ import os
 import sys
 from distutils.core import setup
 
+from greenclock import __version__
+
 # See: http://docs.python.org/3.1/distutils/uploading.html
 # .pypirc file should look like:
 # [pypirc]
@@ -22,11 +24,11 @@ def long_description():
 setup(
     name='greenclock',
     packages=['greenclock'],
-    version='0.1.2',
+    version=__version__[:__version__.index('-')],
     description='gevent-based task scheduling library.',
-    license='MIT',
+    # LICENSE issue: https://github.com/josegonzalez/beaver/commit/1878b8a09b5e308d182f59def64b451f8ce4232d
+    license='LICENSE.txt',
     long_description=long_description(),
-    data_files=[("", ["LICENSE.txt"])],
     install_requires=[
         'gevent',
     ],
