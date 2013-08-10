@@ -32,7 +32,9 @@ class SchedulerTests(unittest.TestCase):
         event1 = AsyncResult()
         greenlet1.link(event1)
         self.assertEqual(event1.get(), 100)
-        sleep(3)
+        assert greenlet2.ready() == False
+        assert greenlet2.successful() == False
+        sleep(INTERVAL)
         assert greenlet2.ready() == True
         assert greenlet2.successful() == True
         greenlet2.kill()
