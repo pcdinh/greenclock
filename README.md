@@ -50,6 +50,11 @@ if __name__ == "__main__":
     scheduler = greenclock.Scheduler(logger_name='task_scheduler')
     scheduler.schedule('task_1', func_1, greenclock.every(seconds=4))
     scheduler.schedule('task_2', func_2, greenclock.every(seconds=1))
-    scheduler.run_forever(start_at=None)
-    
+    # to start the scheduled tasks immediately, specify 'once' for `start_at`
+    # other values: 
+    # * `next_minute`: Wait to the first seconds of the next minute to run
+    # * `next_hour`: Wait to the first seconds of the next hour to run
+    # * `tomorrow`: Wait to the first seconds of tomorrow to run
+    scheduler.run_forever(start_at='once')
+
 ```
