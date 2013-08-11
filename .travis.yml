@@ -5,10 +5,9 @@ python:
     - "3.3"
 install:
     - pip install pytest-cov --use-mirrors
-    - pip install pytest-pep8 --use-mirrors
     - pip install coveralls --use-mirrors
 
-script: py.test tests/test_scheduling.py --pep8 greenclock -v --cov greenclock --cov-report term-missing
+script: py.test tests/test_scheduling.py -v --cov greenclock --cov-report term-missing
 
 after_success:
     - coveralls
