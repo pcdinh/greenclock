@@ -2,6 +2,7 @@ GreenClock
 ==========
 
 [![Travs-CI status](https://travis-ci.org/pcdinh/greenclock.png)](https://travis-ci.org/pcdinh/greenclock) 
+[![Coverage Status](https://coveralls.io/repos/pcdinh/greenclock/badge.png)](https://coveralls.io/r/pcdinh/greenclock)
 
 GreenClock is a time-based task scheduler using gevent
 
