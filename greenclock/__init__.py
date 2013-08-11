@@ -135,6 +135,8 @@ class Scheduler(object):
     def __init__(self, logger_name='greenlock.task'):
         self.logger_name = logger_name
         self.tasks = []
+        self.active = {}  # action task name registry
+        self.waiting = {}  # action task name registry
         self.running = True
 
     def schedule(self, name, timer, func, *args, **kwargs):
@@ -145,17 +147,56 @@ class Scheduler(object):
         ts.run_forever()
         '''
         self.tasks.append(Task(name, func, timer, *args, **kwargs))
+        self.active[name] = []  # list of greenlets
+        self.waiting[name] = []
+
+    def unschedule(self, task_name):
+        '''
+        Removes a task from scheduled jobs but it will not kill running tasks
+        '''
+        for greenlet in self.waiting[task_name]:
+            try:
+                gevent.kill(greenlet)
+            except BaseException:
+                pass
+
+    def stop_task(self, task_name):
+        '''
+        Stops a running or dead task
+        '''
+        for greenlet in self.active[task_name]:
+            try:
+                # Do not need to check if greenlet is dead, gevent does it already
+                gevent.kill(greenlet)
+                self.active[task_name] = []
+            except BaseException:
+                pass
+
+    def _remove_dead_greenlet(self, task_name):
+        '''
+        Removes dead greenlet or done task from active list
+        '''
+        for greenlet in self.active[task_name]:
+            try:
+                # Allows active greenlet continue to run
+                if greenlet.dead:
+                    self.active[task_name].remove(greenlet)
+            except BaseException:
+                pass
 
     def run(self, task):
         '''
         Runs a task and re-schedule it
         '''
+        self._remove_dead_greenlet(task.name)
         if isinstance(task.timer, types.GeneratorType):
             # Starts the task immediately
             greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
+            self.active[task.name].append(greenlet_)
             try:
                 # total_seconds is available in Python 2.7
                 greenlet_later = gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
+                self.waiting[task.name].append(greenlet_later)
                 return greenlet_, greenlet_later
             except StopIteration:
                 pass
@@ -166,9 +207,12 @@ class Scheduler(object):
                 delay = task.timer.next().total_seconds()
                 gevent.sleep(delay)
                 greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
+                self.active[task.name].append(greenlet_)
             else:
                 greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
+                self.active[task.name].append(greenlet_)
             greenlet_later = gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
+            self.waiting[task.name].append(greenlet_later)
             return greenlet_, greenlet_later
         except StopIteration:
             pass
