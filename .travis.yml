@@ -4,6 +4,9 @@ python:
     - "2.7"
     - "3.3"
 install:
+    - pip install Cython
+    - pip install greenlet
+    - pip install cython -e git://github.com/surfly/gevent.git@1.0rc2#egg=gevent
     - pip install pytest-cov --use-mirrors
     - pip install coveralls --use-mirrors
 
