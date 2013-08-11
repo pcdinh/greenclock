@@ -109,4 +109,6 @@ Basically to schedule a periodic task or job, you need to specify the following 
 `Scheduler` object can run a separate process which never exits if you want it to
 ```
     scheduler.run_forever(start_at='once')
-```    
+```
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pcdinh/greenclock/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
