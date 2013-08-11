@@ -33,8 +33,8 @@ Basically to schedule a periodic task or job, you need to specify the following 
     scheduler.run_forever(start_at='once')
 """
 
-version_info = (0, 2, 0, 'dev', None)
-__version__ = '0.2.0-dev'
+from . import version
+__version__ = version.__version__
 
 import types
 import logging

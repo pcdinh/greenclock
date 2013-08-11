@@ -4,7 +4,7 @@ import os
 import sys
 from distutils.core import setup
 
-from greenclock import __version__
+from greenclock.version import __version__
 
 # See: http://docs.python.org/3.1/distutils/uploading.html
 # .pypirc file should look like:
