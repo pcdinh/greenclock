@@ -74,6 +74,10 @@ if __name__ == "__main__":
     scheduler = greenclock.Scheduler(logger_name='task_scheduler')
     scheduler.schedule('task_1', greenclock.every_second(4), func_1)
     scheduler.schedule('task_2', greenclock.every_second(1), func_2)
+    # Run at 41:00 every hour every day
+    scheduler.schedule('task_3', greenclock.every_hour(minute=41, second=0), func_3)
+    # Run task at 12:35:00 every day
+    scheduler.schedule('task_2', greenclock.every_hour(hour=12, minute=35, second=0), func_2)    
     # To start the scheduled tasks immediately, specify 'once' for `start_at`
     # Other values: 
     # * `next_minute`: Wait until the first seconds of the next minute to run
