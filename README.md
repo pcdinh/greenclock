@@ -112,3 +112,4 @@ Basically to schedule a periodic task or job, you need to specify the following 
 ```
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pcdinh/greenclock/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/a7b875db36121c410c906c620f242458 "githalytics.com")](http://githalytics.com/pcdinh/greenclock)
