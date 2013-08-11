@@ -1,8 +1,9 @@
 # coding: utf-8
 
-version_info = (0, 1, 3, 'dev', None)
-__version__ = '0.1.3-dev'
+version_info = (0, 2, 0, 'dev', None)
+__version__ = '0.2.0-dev'
 
+import types
 import logging
 import time
 from datetime import timedelta, datetime
@@ -11,18 +12,66 @@ from gevent.pool import Pool
 from gevent import monkey
 monkey.patch_all()
 
-def every(*args, **kwargs):
+def every_second(seconds):
     '''
     Iterator-based timer
-    
+
     @example 
     >> every(seconds=10)
-    >> every(hours=1)
     @return an iterator of timedelta object
     '''
-    delta = timedelta(*args, **kwargs)
+    delta = timedelta(seconds=seconds)
+    # Never return StopIteration
     while 1:
         yield delta
+
+class every_hour(object):
+    '''
+    A class-based iterator that help install a timer for hourly scheduled task
+    - Every hour in a day
+    - Fixed hour in a day
+    
+    The name is chosen in all lower case to make it looks like a function because it will 
+    be used as if it was a generator.
+    '''
+    def __init__(self, hour=None, minute=0, second=0):
+        self.started = False
+        self.hour = hour
+        self.minute = minute
+        self.second = second
+    def __iter__(self):
+        return self
+    def next(self):
+        '''
+        Never return StopIteration
+        '''
+        if self.started is False:
+
+            self.started = True
+            now_ = datetime.now()
+            if self.hour:
+                # Fixed hour in a day
+                # Next run will be the next day
+                scheduled = now_.replace(hour=self.hour, minute=self.minute, second=self.second, microsecond=0)
+                if scheduled == now_:
+                    return timedelta(seconds=0)
+                elif scheduled < now_:
+                    # Scheduled time is passed
+                    return scheduled.replace(day=now_.day + 1) - now_
+            else:
+                # Every hour in a day
+                # Next run will be the next hour
+                scheduled = now_.replace(minute=self.minute, second=self.second, microsecond=0)
+                if scheduled == now_:
+                    return timedelta(seconds=0)
+                elif scheduled < now_:
+                    # Scheduled time is passed
+                    return scheduled.replace(hour=now_.hour + 1) - now_
+            return scheduled - now_
+        else:
+            if self.hour:
+                return timedelta(days=1)  # next day
+            return timedelta(hours=1)  # next hour
 
 def wait_until(time_label):
     '''
@@ -55,7 +104,7 @@ class Scheduler(object):
         self.tasks = []
         self.running = True
 
-    def schedule(self, name, func, timer, *args, **kwargs):
+    def schedule(self, name, timer, func, *args, **kwargs):
         '''
         ts = Scheduler('my_task')
         ts.schedule(every(seconds=10), handle_message, "Every 10 seconds")
@@ -68,9 +117,24 @@ class Scheduler(object):
         '''
         Runs a task and re-schedule it
         '''
-        greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
+        if isinstance(task.timer, types.GeneratorType):
+            # Starts the task immediately
+            greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
+            try:
+                # total_seconds is available in Python 2.7
+                greenlet_later = gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
+                return greenlet_, greenlet_later
+            except StopIteration:
+                pass
+            return greenlet_, None
+        # Class based timer
         try:
-            # total_seconds is available in Python 2.7
+            if task.timer.started is False:
+                delay = task.timer.next().total_seconds()
+                gevent.sleep(delay)
+                greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
+            else:
+                greenlet_ = gevent.spawn(task.action, *task.args, **task.kwargs)
             greenlet_later = gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
             return greenlet_, greenlet_later
         except StopIteration:
@@ -83,6 +147,8 @@ class Scheduler(object):
         '''
         pool = Pool(len(self.tasks))
         for task in self.tasks:
+            # Launch a green thread to schedule the task
+            # A task will be managed by 2 green thread: execution thread and scheduling thread
             pool.spawn(self.run, task)
         return pool
 

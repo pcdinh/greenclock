@@ -17,6 +17,8 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload -r pypi')
     sys.exit()
 
+VERSION = __version__[:__version__.index('-')]
+
 def long_description():
     """Get the long description from the README"""
     return open(os.path.join(sys.path[0], 'README.md')).read()
@@ -24,10 +26,10 @@ def long_description():
 setup(
     name='greenclock',
     packages=['greenclock'],
-    version=__version__[:__version__.index('-')],
-    description='gevent-based task scheduling library.',
+    version=VERSION,
+    description='A library that provides time-based task scheduling using green threads via gevent.',
     # LICENSE issue: https://github.com/josegonzalez/beaver/commit/1878b8a09b5e308d182f59def64b451f8ce4232d
-    license='LICENSE.txt',
+    license='MIT',
     long_description=long_description(),
     install_requires=[
         'gevent',
@@ -35,7 +37,7 @@ setup(
     author='Pham Cong Dinh',
     author_email='pcdinh@gmail.com',
     url='https://github.com/pcdinh/greenclock',
-    download_url='https://github.com/pcdinh/greenclock/tarball/0.1.0',
+    download_url='https://github.com/pcdinh/greenclock/tarball/' + VERSION,
     keywords=[
         'cron', 'scheduling', 'schedule', 'periodic', 'jobs', 'clockwork', 'gevent'
     ],
