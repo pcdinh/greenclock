@@ -1,7 +1,7 @@
 GreenClock
 ==========
 
-# tar_scm (OBS source service) [![Build Status](https://travis-ci.org/openSUSE/obs-service-tar_scm.png?branch=master)](https://travis-ci.org/openSUSE/obs-service-tar_scm)
+[![Travs-CI status](https://travis-ci.org/pcdinh/greenclock.png)](https://travis-ci.org/pcdinh/greenclock) 
 
 GreenClock is a time-based task scheduler using gevent
 
