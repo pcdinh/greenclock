@@ -1,6 +1,8 @@
 GreenClock
 ==========
 
+# tar_scm (OBS source service) [![Build Status](https://travis-ci.org/openSUSE/obs-service-tar_scm.png?branch=master)](https://travis-ci.org/openSUSE/obs-service-tar_scm)
+
 GreenClock is a time-based task scheduler using gevent
 
 With GreenClock, you can: Schedule a task to run every X seconds, daily, weekly, monthly, 
@@ -16,7 +18,7 @@ This module is currently under development.
 ### Features
 
     - A simple to use API for scheduling jobs.
-    - Lightweight
+    - Lightweight (depending on gevent only)
     - Works with Python 2.7+
     - Support the following scheduling scenarios: 
         + run every X seconds
@@ -86,3 +88,24 @@ if __name__ == "__main__":
     scheduler.run_forever(start_at='once')
 
 ```
+
+Basically to schedule a periodic task or job, you need to specify the following parameters:
+
+    + Task name: `task_1`
+    + A timer that let the scheduler know how to run a periodic task
+
+```        
+        # run the task for every 4 seconds
+        greenclock.every_second(4) 
+        # run the task every day at 01:10:00
+        greenclock.every_hour(hour=1, minute=10, second=0)
+```        
+    + A function or callable object
+    + Optional parameters to the above function or callable object
+```    
+        scheduler.schedule('task_1', greenclock.every_second(1), func_1, param1, param2, named_param=2)
+```    
+`Scheduler` object can run a separate process which never exits if you want it to
+```
+    scheduler.run_forever(start_at='once')
+```    
