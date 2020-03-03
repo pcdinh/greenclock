@@ -27,7 +27,7 @@ setup(
     long_description=long_description(),
     long_description_content_type="text/x-rst",
     install_requires=[
-        'gevent==1.5a3',
+        'gevent>=1.4.0',
     ],
     author='Pham Cong Dinh',
     author_email='pcdinh@gmail.com',
