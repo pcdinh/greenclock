@@ -62,18 +62,18 @@ class every_hour(object):
                 scheduled = time_now.replace(hour=self.hour, minute=self.minute, second=self.second, microsecond=0)
                 if scheduled == time_now:
                     return timedelta(seconds=0)
-                elif scheduled < time_now:
+                if scheduled < time_now:
                     # Scheduled time is passed
-                    return scheduled.replace(day=time_now.day + 1) - time_now
+                    return scheduled + datetime.timedelta(days=1) - time_now
             else:
                 # Every hour in a day
                 # Next run will be the next hour
                 scheduled = time_now.replace(minute=self.minute, second=self.second, microsecond=0)
                 if scheduled == time_now:
                     return timedelta(seconds=0)
-                elif scheduled < time_now:
+                if scheduled < time_now:
                     # Scheduled time is passed
-                    return scheduled.replace(hour=time_now.hour + 1) - time_now
+                    return scheduled + datetime.timedelta(hour=1) - time_now
             return scheduled - time_now
         else:
             if self.hour:
