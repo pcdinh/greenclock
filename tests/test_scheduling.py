@@ -7,6 +7,9 @@ from gevent import sleep
 from greenclock.utils import every_second, every_hour, Scheduler
 
 
+INTERVAL = 2
+
+
 class MockDate1(datetime.datetime):
     @classmethod
     def now(cls):
@@ -65,7 +68,6 @@ class SchedulerTests(unittest.TestCase):
 
     def test_task_assignment(self):
         # See https://github.com/surfly/gevent/blob/master/greentest/test__event.py
-        INTERVAL = 2
         self.scheduler.schedule('task_1', every_second(INTERVAL), func_1)
         assert self.scheduler.tasks[0].name == 'task_1'
         greenlet1, greenlet2 = self.scheduler.run(self.scheduler.tasks[0])
