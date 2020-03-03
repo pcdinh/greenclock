@@ -10,7 +10,7 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload -r pypi')
     sys.exit()
 
-VERSION = __version__[:__version__.index('.')]
+VERSION = __version__[:__version__.index('-')]
 
 
 def long_description():
