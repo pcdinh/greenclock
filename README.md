@@ -29,7 +29,7 @@ This module is currently under development.
 
 ### Installation
 
-This library depends on gevent 1.0 RC2
+This library depends on gevent 1.5
 
 ```bash
     $ pip install cython -e git://github.com/surfly/gevent.git@1.0rc2#egg=gevent
