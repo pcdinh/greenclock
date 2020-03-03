@@ -15,7 +15,7 @@ VERSION = __version__[:__version__.index('-')]
 
 def long_description():
     """Get the long description from the README"""
-    return open(os.path.join(sys.path[0], 'README.md')).read()
+    return open(os.path.join(sys.path[0], 'README.rst')).read()
 
 
 setup(
