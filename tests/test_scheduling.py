@@ -4,14 +4,14 @@ import datetime
 import unittest
 from gevent.event import AsyncResult
 from gevent import sleep
-
-import greenclock
 from greenclock.utils import every_second, every_hour, Scheduler
+
 
 class MockDate1(datetime.datetime):
     @classmethod
     def now(cls):
         return cls(2013, 8, 11, 0, 0, 0)
+
 
 class MockDatetime(object):
 
@@ -27,8 +27,10 @@ class MockDatetime(object):
         datetime.datetime = self.old_datetime
         return self
 
+
 def func_1():
     return 100
+
 
 class SchedulerTests(unittest.TestCase):
 
