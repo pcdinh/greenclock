@@ -56,7 +56,7 @@ class every_hour(object):
             self.started = True
             time_now = datetime.now()
 
-            if self.hour is 0 or self.hour:
+            if self.hour == 0 or self.hour:
                 # Fixed hour in a day
                 # Next run will be the next day
                 scheduled = time_now.replace(hour=self.hour, minute=self.minute, second=self.second, microsecond=0)
@@ -64,7 +64,7 @@ class every_hour(object):
                     return timedelta(seconds=0)
                 if scheduled < time_now:
                     # Scheduled time is passed
-                    return scheduled + datetime.timedelta(days=1) - time_now
+                    return scheduled + timedelta(days=1) - time_now
             else:
                 # Every hour in a day
                 # Next run will be the next hour
@@ -73,7 +73,7 @@ class every_hour(object):
                     return timedelta(seconds=0)
                 if scheduled < time_now:
                     # Scheduled time is passed
-                    return scheduled + datetime.timedelta(hour=1) - time_now
+                    return scheduled + timedelta(hour=1) - time_now
             return scheduled - time_now
         else:
             if self.hour:
@@ -172,7 +172,7 @@ class Scheduler(object):
             self.active[task.name].append(green_thread)
             try:
                 # total_seconds is available in Python 2.7
-                green_thread_later = gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
+                green_thread_later = gevent.spawn_later(task.timer.__next__().total_seconds(), self.run, task)
                 self.waiting[task.name].append(green_thread_later)
                 return green_thread, green_thread_later
             except StopIteration:
@@ -188,7 +188,7 @@ class Scheduler(object):
             else:
                 green_thread = gevent.spawn(task.action, *task.args, **task.kwargs)
                 self.active[task.name].append(green_thread)
-            green_thread_later = gevent.spawn_later(task.timer.next().total_seconds(), self.run, task)
+            green_thread_later = gevent.spawn_later(task.timer.__next__().total_seconds(), self.run, task)
             self.waiting[task.name].append(green_thread_later)
             return green_thread, green_thread_later
         except StopIteration:

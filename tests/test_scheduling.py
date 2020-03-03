@@ -2,12 +2,11 @@
 
 import datetime
 import unittest
-import mock
 from gevent.event import AsyncResult
-from gevent import sleep, Timeout, with_timeout
+from gevent import sleep
 
 import greenclock
-from greenclock.utils import every_second, every_hour
+from greenclock.utils import every_second, every_hour, Scheduler
 
 class MockDate1(datetime.datetime):
     @classmethod
@@ -34,14 +33,14 @@ def func_1():
 class SchedulerTests(unittest.TestCase):
 
     def setUp(self):
-        self.scheduler = greenclock.Scheduler()
+        self.scheduler = Scheduler()
 
     def tearDown(self):
         self.scheduler.stop()
 
     def test_builtin_timer_second(self):
-        assert every_second(2).next().total_seconds() == 2
-        assert every_second(3600).next().total_seconds() == 3600
+        assert every_second(2).__next__().total_seconds() == 2
+        assert every_second(3600).__next__().total_seconds() == 3600
 
     def test_builtin_timer_hour1(self):
         # Unable to mock the datetime.datetime.now using @mock.patch('datetime.datetime.now')
@@ -71,11 +70,11 @@ class SchedulerTests(unittest.TestCase):
         event1 = AsyncResult()
         greenlet1.link(event1)
         self.assertEqual(event1.get(), 100)
-        assert greenlet2.ready() == False
-        assert greenlet2.successful() == False
+        assert greenlet2.ready() is False
+        assert greenlet2.successful() is False
         sleep(INTERVAL)
-        assert greenlet2.ready() == True
-        assert greenlet2.successful() == True
+        assert greenlet2.ready() is True
+        assert greenlet2.successful() is True
         greenlet2.kill()
         greenlet1.kill()
         assert greenlet2.value[0].get() == 100, 'Actual %s' % str(greenlet2.value[0].get())
