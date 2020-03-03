@@ -34,6 +34,11 @@ class every_hour(object):
     """
 
     def __init__(self, hour=None, minute=0, second=0):
+        """
+        :param hour:
+        :param minute:
+        :param second:
+        """
         self.started = False
         self.hour = hour
         self.minute = minute
@@ -49,26 +54,27 @@ class every_hour(object):
         if self.started is False:
 
             self.started = True
-            now_ = datetime.now()
-            if self.hour:
+            time_now = datetime.now()
+
+            if self.hour is 0 or self.hour:
                 # Fixed hour in a day
                 # Next run will be the next day
-                scheduled = now_.replace(hour=self.hour, minute=self.minute, second=self.second, microsecond=0)
-                if scheduled == now_:
+                scheduled = time_now.replace(hour=self.hour, minute=self.minute, second=self.second, microsecond=0)
+                if scheduled == time_now:
                     return timedelta(seconds=0)
-                elif scheduled < now_:
+                elif scheduled < time_now:
                     # Scheduled time is passed
-                    return scheduled.replace(day=now_.day + 1) - now_
+                    return scheduled.replace(day=time_now.day + 1) - time_now
             else:
                 # Every hour in a day
                 # Next run will be the next hour
-                scheduled = now_.replace(minute=self.minute, second=self.second, microsecond=0)
-                if scheduled == now_:
+                scheduled = time_now.replace(minute=self.minute, second=self.second, microsecond=0)
+                if scheduled == time_now:
                     return timedelta(seconds=0)
-                elif scheduled < now_:
+                elif scheduled < time_now:
                     # Scheduled time is passed
-                    return scheduled.replace(hour=now_.hour + 1) - now_
-            return scheduled - now_
+                    return scheduled.replace(hour=time_now.hour + 1) - time_now
+            return scheduled - time_now
         else:
             if self.hour:
                 return timedelta(days=1)  # next day
