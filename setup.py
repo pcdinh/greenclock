@@ -25,6 +25,7 @@ setup(
     description='A library that provides time-based task scheduling using green threads via gevent.',
     license='MIT',
     long_description=long_description(),
+    long_description_content_type="text/x-rst",
     install_requires=[
         'gevent>=1.5a3',
     ],
