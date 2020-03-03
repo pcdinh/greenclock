@@ -61,7 +61,7 @@ Usage
 
 ::
 
-    from greenclock.utils import Scheduler
+    from greenclock.utils import Scheduler, every_second, every_hour
     from datetime import datetime
     import time
 
@@ -77,12 +77,12 @@ Usage
 
     if __name__ == "__main__":
         scheduler = Scheduler(logger_name='task_scheduler')
-        scheduler.schedule('task_1', greenclock.every_second(4), func_1)
-        scheduler.schedule('task_2', greenclock.every_second(1), func_2)
+        scheduler.schedule('task_1', every_second(4), func_1)
+        scheduler.schedule('task_2', every_second(1), func_2)
         # Run hourly task at 41:00 every day
-        scheduler.schedule('task_3', greenclock.every_hour(minute=41, second=0), func_3)
+        scheduler.schedule('task_3', every_hour(minute=41, second=0), func_3)
         # Run daily task at 12:35:00
-        scheduler.schedule('task_2', greenclock.every_hour(hour=12, minute=35, second=0), func_2)    
+        scheduler.schedule('task_2', every_hour(hour=12, minute=35, second=0), func_2)
         # To start the scheduled tasks immediately, specify 'once' for `start_at`
         # Other values: 
         # * `next_minute`: Wait until the first seconds of the next minute to run
@@ -90,37 +90,34 @@ Usage
         # * `tomorrow`: Wait until the first seconds of tomorrow to run
         scheduler.run_forever(start_at='once')
 
-Basically to schedule a periodic task or job, you need to specify the
+To schedule a periodic task or job, you need to specify the
 following parameters:
 
-::
-
-    + Task name: `task_1`
-    + A timer that let the scheduler know how to run a periodic task
++ Task name: `task_1`
++ A timer that let the scheduler know how to run a periodic task
 
 ::
 
-            # run the task for every 4 seconds
-            from greenclock.utils import every_second, every_hour
-            every_second(4) 
-            # run the task every day at 01:10:00
-            every_hour(hour=1, minute=10, second=0)
+    # run the task for every 4 seconds
+    from greenclock.utils import every_second, every_hour
+    every_second(4)
+    # run the task every day at 01:10:00
+    every_hour(hour=1, minute=10, second=0)
+
+
++ A function or callable object
++ Optional parameters to the above function or callable object
 
 ::
 
-    + A function or callable object
-    + Optional parameters to the above function or callable object
-
-::
-
-            scheduler.schedule('task_1', greenclock.every_second(1), func_1, param1, param2, named_param=2)
+    scheduler.schedule('task_1', greenclock.every_second(1), func_1, param1, param2, named_param=2)
 
 ``Scheduler`` object can run a separate process which never exits if you
 want it to
 
 ::
 
-        scheduler.run_forever(start_at='once')
+    scheduler.run_forever(start_at='once')
 
 .. |Travs-CI status| image:: https://travis-ci.org/pcdinh/greenclock.png
    :target: https://travis-ci.org/pcdinh/greenclock
