@@ -25,7 +25,7 @@ Features
 
     - A simple to use API for scheduling jobs.
     - Lightweight (depending on gevent only)
-    - Works with Python 2.7+
+    - Works with Python 3.7+
     - Support the following scheduling scenarios: 
         + run every X seconds
         + run every hour at specified minute and second
@@ -35,11 +35,7 @@ Features
 Installation
 ------------
 
-This library depends on gevent 1.5
-
-.. code:: bash
-
-        $ pip install cython -e git://github.com/surfly/gevent.git@1.0rc2#egg=gevent
+This library depends on gevent 1.4+
 
 To install GreenClock from `pip <https://pypi.python.org/pypi/pip>`__:
 
@@ -126,13 +122,7 @@ want it to
 
         scheduler.run_forever(start_at='once')
 
-|Bitdeli Badge| |githalytics.com alpha|
-
 .. |Travs-CI status| image:: https://travis-ci.org/pcdinh/greenclock.png
    :target: https://travis-ci.org/pcdinh/greenclock
 .. |Coverage Status| image:: https://coveralls.io/repos/pcdinh/greenclock/badge.png
    :target: https://coveralls.io/r/pcdinh/greenclock
-.. |Bitdeli Badge| image:: https://d2weczhvl823v0.cloudfront.net/pcdinh/greenclock/trend.png
-   :target: https://bitdeli.com/free
-.. |githalytics.com alpha| image:: https://cruel-carlota.pagodabox.com/a7b875db36121c410c906c620f242458
-   :target: http://githalytics.com/pcdinh/greenclock
