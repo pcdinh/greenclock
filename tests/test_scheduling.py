@@ -7,7 +7,7 @@ from gevent.event import AsyncResult
 from gevent import sleep, Timeout, with_timeout
 
 import greenclock
-from greenclock import every_second, every_hour
+from greenclock.utils import every_second, every_hour
 
 class MockDate1(datetime.datetime):
     @classmethod
@@ -79,6 +79,7 @@ class SchedulerTests(unittest.TestCase):
         greenlet2.kill()
         greenlet1.kill()
         assert greenlet2.value[0].get() == 100, 'Actual %s' % str(greenlet2.value[0].get())
+
 
 if __name__ == '__main__':
     unittest.main()

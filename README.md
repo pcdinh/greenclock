@@ -58,8 +58,7 @@ To install GreenClock from source:
 ### Usage
 
 ```
-
-import greenclock
+from greenclock.utils import Scheduler
 from datetime import datetime
 import time
 
@@ -74,7 +73,7 @@ def func_2():
     print('Ended call to func_2() at ' + str(datetime.now()))
 
 if __name__ == "__main__":
-    scheduler = greenclock.Scheduler(logger_name='task_scheduler')
+    scheduler = Scheduler(logger_name='task_scheduler')
     scheduler.schedule('task_1', greenclock.every_second(4), func_1)
     scheduler.schedule('task_2', greenclock.every_second(1), func_2)
     # Run hourly task at 41:00 every day
@@ -97,9 +96,10 @@ Basically to schedule a periodic task or job, you need to specify the following 
 
 ```        
         # run the task for every 4 seconds
-        greenclock.every_second(4) 
+        from greenclock.utils import every_second, every_hour
+        every_second(4) 
         # run the task every day at 01:10:00
-        greenclock.every_hour(hour=1, minute=10, second=0)
+        every_hour(hour=1, minute=10, second=0)
 ```        
     + A function or callable object
     + Optional parameters to the above function or callable object

@@ -26,7 +26,7 @@ setup(
     license='MIT',
     long_description=long_description(),
     install_requires=[
-        'gevent>=1.5a4',
+        'gevent>=1.5a3',
     ],
     author='Pham Cong Dinh',
     author_email='pcdinh@gmail.com',
